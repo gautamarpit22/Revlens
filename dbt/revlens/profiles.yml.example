@@ -1,0 +1,15 @@
+# Copy to ~/.dbt/profiles.yml. Two targets: snowflake (trial) and duckdb (free forever).
+revlens:
+  target: duckdb
+  outputs:
+    duckdb:
+      type: duckdb
+      path: ../../revlens.duckdb
+    snowflake:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      database: REVLENS
+      warehouse: COMPUTE_XS
+      schema: ANALYTICS

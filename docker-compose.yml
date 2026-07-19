@@ -1,0 +1,20 @@
+# Redpanda: Kafka-compatible streaming, single container, zero config.
+# Start:  docker compose up -d
+# UI:     http://localhost:8080  (Redpanda Console — topics, messages, consumers)
+services:
+  redpanda:
+    image: redpandadata/redpanda:latest
+    command:
+      - redpanda start
+      - --overprovisioned
+      - --smp 1
+      - --memory 1G
+      - --kafka-addr PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr PLAINTEXT://localhost:9092
+    ports: ["9092:9092"]
+  console:
+    image: redpandadata/console:latest
+    environment:
+      KAFKA_BROKERS: redpanda:9092
+    ports: ["8080:8080"]
+    depends_on: [redpanda]

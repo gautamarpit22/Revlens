@@ -1,0 +1,6 @@
+revlens:
+  target: duckdb
+  outputs:
+    duckdb:
+      type: duckdb
+      path: "{{ env_var('REVLENS_DB_PATH', 'revlens.duckdb') | as_text }}"

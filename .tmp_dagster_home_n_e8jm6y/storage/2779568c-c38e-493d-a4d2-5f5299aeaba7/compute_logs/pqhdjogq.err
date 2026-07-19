@@ -1,0 +1,5 @@
+[32m2026-07-18 17:30:12 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87113 - LOGS_CAPTURED - Started capturing logs in process (pid: 87113).
+[32m2026-07-18 17:30:12 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87113 - generate_sample_data - STEP_START - Started execution of step "generate_sample_data".
+[32m2026-07-18 17:30:23 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87113 - generate_sample_data - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+[32m2026-07-18 17:30:23 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87113 - generate_sample_data - ASSET_MATERIALIZATION - Materialized value generate_sample_data.
+[32m2026-07-18 17:30:23 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87113 - generate_sample_data - STEP_SUCCESS - Finished execution of step "generate_sample_data" in 11.35s.

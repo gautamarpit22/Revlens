@@ -1,0 +1,13 @@
+version: 2
+sources:
+  - name: raw
+    schema: raw
+    description: "As-landed data. events_raw is unparsed JSON (replayable); CRM/billing are API-shaped exports."
+    tables:
+      - name: events_raw
+      - name: hubspot_companies
+      - name: hubspot_contacts
+      - name: hubspot_deals
+      - name: stripe_customers
+      - name: stripe_subscriptions
+      - name: stripe_invoices

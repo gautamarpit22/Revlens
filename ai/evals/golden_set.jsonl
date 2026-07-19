@@ -1,0 +1,15 @@
+{"id": "mrr_last_month", "question": "What was total MRR last month?", "truth_sql": "select round(sum(mrr),2) as total_mrr from fct_mrr_monthly where invoice_month = (select max(invoice_month) from fct_mrr_monthly)"}
+{"id": "ndr_latest", "question": "What is our latest NDR?", "truth_sql": "select ndr from fct_ndr where invoice_month = (select max(invoice_month) from fct_ndr)"}
+{"id": "top_channel_revenue", "question": "Which acquisition channel has generated the most revenue?", "truth_sql": "select channel from fct_revenue_attribution order by total_revenue_usd desc limit 1"}
+{"id": "best_conversion_channel", "question": "Which channel has the best signup to paid conversion rate?", "truth_sql": "select channel from fct_revenue_attribution order by signup_to_paid_rate desc limit 1"}
+{"id": "churned_last_month", "question": "How many accounts churned last month?", "truth_sql": "select churned_accounts from fct_ndr where invoice_month = (select max(invoice_month) from fct_ndr)"}
+{"id": "paying_accounts", "question": "How many paying accounts do we have in total?", "truth_sql": "select count(distinct account_id) as paying_accounts from fct_mrr_monthly"}
+{"id": "google_signups", "question": "How many accounts signed up from google?", "truth_sql": "select accounts_signed_up from fct_revenue_attribution where channel = 'google'"}
+{"id": "expansion_accounts", "question": "How many account-months were classified as expansion?", "truth_sql": "select count(*) as n from fct_mrr_monthly where movement = 'expansion'"}
+{"id": "crm_match_rate", "question": "What share of accounts are matched to a CRM company?", "truth_sql": "select round(avg(case when is_crm_matched then 1 else 0 end),3) as crm_match_rate from dim_accounts"}
+{"id": "events_stitched", "question": "How many events were retroactively stitched to a user?", "truth_sql": "select count(*) as stitched from fct_events where is_stitched"}
+{"id": "docs_created_total", "question": "How many documents have been created in total?", "truth_sql": "select count(*) as docs from fct_events where event_name = 'doc_created'"}
+{"id": "mrr_by_month", "question": "Show total MRR by month", "truth_sql": "select invoice_month, round(sum(mrr),2) as total_mrr from fct_mrr_monthly group by 1 order by 1"}
+{"id": "unattributed_accounts", "question": "How many signed up accounts have no attribution channel?", "truth_sql": "select accounts_signed_up from fct_revenue_attribution where channel = '(unattributed)'"}
+{"id": "revenue_per_paying_producthunt", "question": "What is the revenue per paying account for producthunt?", "truth_sql": "select revenue_per_paying_account from fct_revenue_attribution where channel = 'producthunt'"}
+{"id": "mobile_events_share", "question": "What fraction of events came from mobile devices (mobile_web, ios_app or android_app)?", "truth_sql": "select round(avg(case when device_type in ('mobile_web','ios_app','android_app') then 1 else 0 end),3) as mobile_share from fct_events"}

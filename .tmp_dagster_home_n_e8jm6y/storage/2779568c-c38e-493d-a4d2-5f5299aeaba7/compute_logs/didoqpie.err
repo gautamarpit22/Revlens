@@ -1,0 +1,5 @@
+[32m2026-07-18 17:30:45 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87428 - LOGS_CAPTURED - Started capturing logs in process (pid: 87428).
+[32m2026-07-18 17:30:45 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87428 - stripe_customers - STEP_START - Started execution of step "stripe_customers".
+[32m2026-07-18 17:30:45 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87428 - stripe_customers - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+[32m2026-07-18 17:30:45 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87428 - stripe_customers - ASSET_MATERIALIZATION - Materialized value stripe_customers.
+[32m2026-07-18 17:30:45 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87428 - stripe_customers - STEP_SUCCESS - Finished execution of step "stripe_customers" in 54ms.

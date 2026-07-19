@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://revlens.dev/contracts/product_event.v1.schema.json",
+  "title": "RevLens Product Event Contract v1.0.0",
+  "description": "Contract for all product telemetry events. Events failing validation are routed to the dead-letter table, never dropped silently. Backward-compatible changes only within major version (add optional fields); breaking changes require v2 + dual-write migration window.",
+  "type": "object",
+  "required": ["event_id", "event_name", "event_ts", "schema_version"],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^evt_[a-f0-9]{32}$",
+      "description": "Globally unique, client-generated. Dedup key downstream."
+    },
+    "event_name": {
+      "type": "string",
+      "enum": [
+        "page_viewed", "signed_up", "identify", "session_started",
+        "doc_created", "doc_edited", "comment_added", "search_performed",
+        "integration_used", "member_invited", "export_performed"
+      ],
+      "description": "Closed enum. New events require a contract PR, not ad-hoc emission."
+    },
+    "event_ts": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Client event time (UTC). received_ts is set server-side; the delta measures late arrival."
+    },
+    "received_ts": { "type": ["string", "null"], "format": "date-time" },
+    "anonymous_id": {
+      "type": ["string", "null"],
+      "pattern": "^anon_[a-f0-9]{12}$",
+      "description": "Device-scoped id. Present pre- and post-auth. Joins to user_id via identify events."
+    },
+    "user_id": { "type": ["string", "null"], "pattern": "^usr_[a-f0-9]{12}$" },
+    "device_type": {
+      "type": ["string", "null"],
+      "enum": ["desktop_web", "mobile_web", "ios_app", "android_app", null]
+    },
+    "user_agent": { "type": ["string", "null"] },
+    "schema_version": { "type": "string", "pattern": "^1\\.\\d+\\.\\d+$" },
+    "properties": {
+      "type": "object",
+      "description": "Event-specific payload. account_id required for authenticated events (enforced in dbt, not here, to keep the wire contract stable)."
+    }
+  },
+  "anyOf": [
+    { "required": ["anonymous_id"] },
+    { "required": ["user_id"] }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,5 @@
+[32m2026-07-18 17:30:36 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87391 - LOGS_CAPTURED - Started capturing logs in process (pid: 87391).
+[32m2026-07-18 17:30:36 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87391 - hubspot_contacts - STEP_START - Started execution of step "hubspot_contacts".
+[32m2026-07-18 17:30:37 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87391 - hubspot_contacts - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+[32m2026-07-18 17:30:37 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87391 - hubspot_contacts - ASSET_MATERIALIZATION - Materialized value hubspot_contacts.
+[32m2026-07-18 17:30:37 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87391 - hubspot_contacts - STEP_SUCCESS - Finished execution of step "hubspot_contacts" in 59ms.

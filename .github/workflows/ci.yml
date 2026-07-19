@@ -1,0 +1,24 @@
+name: pipeline
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 6 * * *"   # daily 06:00 UTC — the "production" scheduled run
+jobs:
+  daily-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r requirements.txt duckdb dbt-core dbt-duckdb dagster dagster-dbt
+      - name: Materialize full asset graph via Dagster
+        env:
+          REVLENS_SIM_DAYS: "30"
+          REVLENS_SIM_ACCOUNTS: "60"
+          DBT_PROFILES_DIR: dbt/revlens/profiles
+        run: |
+          cd dbt/revlens && dbt deps && cd ../..
+          dagster asset materialize --select '*' -f orchestration/definitions.py
+      - name: Contract validation gate
+        run: python ingestion/validate_contracts.py sample_data/events/events.ndjson contracts/product_event.v1.schema.json

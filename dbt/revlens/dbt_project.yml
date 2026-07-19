@@ -1,0 +1,11 @@
+name: revlens
+version: "1.0.0"
+profile: revlens
+model-paths: ["models"]
+macro-paths: ["macros"]
+models:
+  revlens:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

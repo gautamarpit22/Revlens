@@ -1,0 +1,6 @@
+sample_data/
+__pycache__/
+.env
+*.duckdb
+dbt/revlens/target/
+dbt/revlens/dbt_packages/

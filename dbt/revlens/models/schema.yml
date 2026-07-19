@@ -1,0 +1,102 @@
+version: 2
+
+models:
+  - name: stg_events
+    description: "Typed, contract-checked, deduplicated product telemetry. One row per unique event_id. Invalid events are routed to stg_events_dead_letter."
+    columns:
+      - name: event_id
+        description: "Client-generated globally unique event key (dedup key)."
+        data_tests: [unique, not_null]
+      - name: event_name
+        description: "Event type from the closed contract enum (e.g. page_viewed, doc_created, identify)."
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [page_viewed, signed_up, identify, session_started, doc_created, doc_edited, comment_added, search_performed, integration_used, member_invited, export_performed]
+      - name: event_ts
+        description: "Client-side event timestamp (UTC)."
+        data_tests: [not_null]
+      - name: arrival_delay_hours
+        description: "Hours between event_ts and received_ts; >24 indicates late-arriving data."
+
+  - name: stg_events_dead_letter
+    description: "Quarantined contract-violating events with failure_reason. Input to DQ monitoring and the AI triage agent."
+    columns:
+      - name: failure_reason
+        description: "Machine-readable contract violation category."
+        data_tests: [not_null]
+
+  - name: int_identity__anon_to_user
+    description: "Identity graph edges: device (anonymous_id) to user, from identify events. First claim wins; conflicts flagged via had_conflicting_claims."
+    columns:
+      - name: anonymous_id
+        data_tests: [unique, not_null]
+      - name: user_id
+        data_tests: [not_null]
+
+  - name: int_identity__user_to_account
+    description: "User to account membership with email, from identify events."
+    columns:
+      - name: user_id
+        data_tests: [unique, not_null]
+
+  - name: int_identity__account_spine
+    description: "One row per account resolved across product, CRM (probabilistic domain match), and billing (deterministic metadata match). Match-rate flags are tracked DQ metrics."
+    columns:
+      - name: account_id
+        data_tests: [unique, not_null]
+
+  - name: fct_events
+    description: "All valid telemetry with identity resolved; pre-signup anonymous events retroactively stitched to their eventual user/account (is_stitched flag)."
+    columns:
+      - name: event_id
+        data_tests: [unique, not_null]
+      - name: device_type
+        description: "One of desktop_web, mobile_web, ios_app, android_app. Mobile = (mobile_web, ios_app, android_app); mobile share = avg(case when device_type in ('mobile_web','ios_app','android_app') then 1 else 0 end)."
+      - name: event_name
+        description: "VALUES of this column (not columns themselves), exactly: page_viewed, signed_up, identify, session_started, doc_created, doc_edited, comment_added, search_performed, integration_used, member_invited, export_performed. Counting an event type = count(*) WHERE event_name = '<value>'."
+
+  - name: dim_accounts
+    description: "Account dimension: cross-system ids, CRM/billing match flags, and first-touch acquisition channel."
+    columns:
+      - name: account_id
+        data_tests: [unique, not_null]
+      - name: first_touch_channel
+        description: "utm_source of the account's earliest observed (stitched) event."
+      - name: is_crm_matched
+        description: "Boolean. CRM match rate / share of accounts matched = avg(case when is_crm_matched then 1 else 0 end)."
+      - name: is_billing_matched
+        description: "Boolean. Billing match rate computed the same way as is_crm_matched."
+
+  - name: fct_mrr_monthly
+    description: "Account-month MRR ledger from paid invoices with movement classification (new/expansion/contraction/retained). Total paying accounts = count(distinct account_id) over this table; account-months for a movement = count(*) filtered on movement."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [invoice_month, account_id]
+    columns:
+      - name: mrr
+        description: "USD recurring revenue recognized for the account in the month."
+        data_tests: [not_null]
+
+  - name: fct_ndr
+    description: "Monthly Net Dollar Retention: retained revenue from prior-month account base, churn counted as zero."
+    columns:
+      - name: ndr
+        description: "retained_mrr / base_mrr. >1.0 means expansion outpaces churn."
+
+  - name: fct_revenue_attribution
+    description: "Closed-loop first-touch attribution, ONE ROW PER CHANNEL with all metrics precomputed. Any per-channel question (signups, conversion, revenue, revenue per account) = SELECT the matching column WHERE channel = '<name>'; never recompute or join. 'Top/best channel by X' = ORDER BY x DESC LIMIT 1."
+    columns:
+      - name: channel
+        description: "Channel name. Accounts without attribution are the row WHERE channel = '(unattributed)'."
+        data_tests: [unique, not_null]
+      - name: accounts_signed_up
+        description: "Precomputed count of signed-up accounts for this channel. 'How many signed up from X' = SELECT this WHERE channel='x'."
+      - name: accounts_paying
+        description: "Precomputed count of paying accounts for this channel."
+      - name: signup_to_paid_rate
+        description: "Precomputed conversion rate. 'Best conversion channel' = ORDER BY this DESC LIMIT 1."
+      - name: total_revenue_usd
+        description: "Precomputed lifetime revenue. 'Top channel by revenue' = ORDER BY this DESC LIMIT 1."
+      - name: revenue_per_paying_account
+        description: "Precomputed. 'Revenue per paying account for X' = SELECT this WHERE channel='x'. Never derive via joins."
