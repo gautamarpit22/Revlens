@@ -4,3 +4,4 @@ __pycache__/
 *.duckdb
 dbt/revlens/target/
 dbt/revlens/dbt_packages/
+.tmp_dagster_home*/

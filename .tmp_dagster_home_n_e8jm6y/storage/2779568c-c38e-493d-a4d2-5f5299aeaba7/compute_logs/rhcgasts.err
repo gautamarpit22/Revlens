@@ -1,5 +1,0 @@
-[32m2026-07-18 17:30:49 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87448 - LOGS_CAPTURED - Started capturing logs in process (pid: 87448).
-[32m2026-07-18 17:30:49 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87448 - stripe_invoices - STEP_START - Started execution of step "stripe_invoices".
-[32m2026-07-18 17:30:49 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87448 - stripe_invoices - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
-[32m2026-07-18 17:30:49 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87448 - stripe_invoices - ASSET_MATERIALIZATION - Materialized value stripe_invoices.
-[32m2026-07-18 17:30:49 +0530[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 2779568c-c38e-493d-a4d2-5f5299aeaba7 - 87448 - stripe_invoices - STEP_SUCCESS - Finished execution of step "stripe_invoices" in 55ms.
