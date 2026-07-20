@@ -5,8 +5,6 @@ a governed single source of truth — with closed-loop revenue attribution, cros
 identity resolution, contract-enforced streaming ingestion, orchestration, and
 production-grade AI features (evaluated NL→SQL copilot + AI data-quality triage).**
 
-Built solo in 5 phases with AI-assisted development (Claude Code / Cowork), total infra
-spend: $0 (DuckDB + open-source stack; warehouse-agnostic dbt runs on Snowflake unchanged).
 
 ## Architecture
 
