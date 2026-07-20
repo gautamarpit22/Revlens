@@ -1,5 +1,13 @@
--- Typed, contract-checked, deduplicated telemetry events.
--- Invalid events are excluded here and captured in stg_events_dead_letter (never dropped silently).
+-- Typed, contract-checked, deduplicated telemetry events. INCREMENTAL: only rows newer
+-- than what's already loaded are processed each run (with a 3-day lookback so
+-- late-arriving events — up to 3 days late in this world — are still merged).
+-- unique_key=event_id makes reprocessed/late duplicates an upsert, not a double-count.
+{{ config(
+    materialized='incremental',
+    unique_key='event_id',
+    incremental_strategy='delete+insert'
+) }}
+
 with parsed as (
     select
         raw_json ->> '$.event_id'                            as event_id,
@@ -27,6 +35,10 @@ valid as (
       and event_name_json_type = 'VARCHAR'  -- excludes non-string chaos (event_name: 123)
       and event_ts is not null
       and (anonymous_id is not null or user_id is not null)
+    {% if is_incremental() %}
+      -- only new + late-arriving rows; 3-day lookback matches the world's max lateness
+      and received_ts > (select coalesce(max(received_ts), '1900-01-01') - interval 3 day from {{ this }})
+    {% endif %}
 ),
 
 deduped as (
