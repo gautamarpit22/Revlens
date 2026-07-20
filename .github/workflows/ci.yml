@@ -18,7 +18,7 @@ jobs:
           REVLENS_SIM_ACCOUNTS: "60"
           DBT_PROFILES_DIR: dbt/revlens/profiles
         run: |
-          cd dbt/revlens && dbt deps && cd ../..
+          cd dbt/revlens && dbt deps && dbt parse --profiles-dir profiles && cd ../..
           dagster asset materialize --select '*' -f orchestration/definitions.py
       - name: Contract validation gate
         run: python ingestion/validate_contracts.py sample_data/events/events.ndjson contracts/product_event.v1.schema.json
