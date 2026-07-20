@@ -23,6 +23,7 @@ from pathlib import Path
 
 import duckdb
 from dagster import (
+    multiprocess_executor,
     AssetExecutionContext,
     AssetKey,
     Definitions,
