@@ -112,6 +112,7 @@ daily_job = define_asset_job("daily_pipeline", selection="*")
 
 defs = Definitions(
     assets=[generate_sample_data, *raw_assets, revlens_dbt],
+    executor=multiprocess_executor.configured({"max_concurrent": 1}),
     jobs=[daily_job],
     schedules=[ScheduleDefinition(job=daily_job, cron_schedule="0 6 * * *", name="daily_0600")],
     resources={"dbt": DbtCliResource(project_dir=dbt_project)},
