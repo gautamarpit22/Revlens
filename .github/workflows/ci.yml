@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      - run: pip install -r requirements.txt duckdb dbt-core dbt-duckdb dagster dagster-dbt
+      - run: pip install -r requirements.txt
       - name: Materialize full asset graph via Dagster
         env:
           REVLENS_SIM_DAYS: "30"

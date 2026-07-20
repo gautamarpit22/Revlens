@@ -1,2 +1,11 @@
-faker>=25.0
-jsonschema>=4.21
+dagster==1.12.1
+dagster-dbt==0.28.1
+dagster-webserver==1.12.1
+dbt-core==1.10.22
+dbt-duckdb==1.10.0
+duckdb==1.4.5
+Faker==37.12.0
+jsonschema==4.25.1
+kafka-python==3.0.8
+pandas==2.3.3
+sqlglot==30.12.0
